@@ -31,9 +31,16 @@ readonly previous_icon="⇽"
 readonly next_icon="⇾"
 readonly state=$(tellspotify 'player state as string')
 readonly size="12"
-readonly color="#98f99d"
 
-if [[ "$state" = "playing" ]]; then
+readonly style="$(defaults read -g AppleInterfaceStyle 2> /dev/null)"
+
+if [ "${style}" = "Dark" ]; then
+  readonly color="#98f99d"
+else
+  readonly color="#006400"
+fi
+
+if [[ "${state}" = "playing" ]]; then
   state_icon="${music_icon}"
 else
   state_icon="${pause_icon}"
