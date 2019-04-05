@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # <bitbar.title>mpd-simple</bitbar.title>
 # <bitbar.version>v1.0</bitbar.version>
@@ -8,11 +8,15 @@
 # <bitbar.image></bitbar.image>
 # <bitbar.dependencies>mpd, mpc</bitbar.dependencies>
 
+if ! pgrep mpd > /dev/null; then
+  exit 0
+fi
+
 readonly mpc="/usr/local/bin/mpc"
-readonly output="$(${mpc} -f '%artist%\n%album%\n%title%')"
+readonly output="$(timeout 1 ${mpc} -f '%artist%\n%album%\n%title%' 2> /dev/null)"
 
 if [[ "$(echo -e "${output}" | wc -l)" -eq 1 ]]; then
-  exit
+  exit 0
 fi
 
 readonly music_icon="♪"
