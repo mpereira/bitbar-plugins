@@ -10,7 +10,7 @@
 
 # TODO: is it possible to get all of the necessary output running one command?
 
-readonly state_directory="/tmp/bitbar/"
+readonly state_directory="/tmp/bitbar"
 readonly state_file="${state_directory}/$(basename "${0}").state"
 
 mkdir -p "${state_directory}"
@@ -20,7 +20,7 @@ readonly mpd_state="$(test -f "${mpd_state_file}" && cat "${mpd_state_file}")"
 
 if [[ "$(osascript -e 'application "Spotify" is running')" = "false" ]]; then
   rm -f "${state_file}"
-  exit
+  exit 0
 fi
 
 function tell_spotify {
@@ -30,7 +30,7 @@ function tell_spotify {
 case "${1}" in
   "activate" | "playpause" | "previous track" | "next track")
     tell_spotify "${1}"
-    exit
+    exit 0
 esac
 
 readonly music_icon="♪"
@@ -45,7 +45,7 @@ readonly player_state="$(tell_spotify "player state as string")"
 echo "${player_state}" > "${state_file}"
 
 if [[ "${player_state}" = "paused" ]] && [[ "${mpd_state}" = "playing" ]]; then
-  exit
+  exit 0
 fi
 
 readonly style="$(defaults read -g AppleInterfaceStyle 2> /dev/null)"

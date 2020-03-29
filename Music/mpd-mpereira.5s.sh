@@ -8,11 +8,11 @@
 # <bitbar.image></bitbar.image>
 # <bitbar.dependencies>mpd, mpc</bitbar.dependencies>
 
-if ! pgrep mpd > /dev/null; then
+if ! pgrep "^mpd$" > /dev/null; then
   exit 0
 fi
 
-readonly state_directory="/tmp/bitbar/"
+readonly state_directory="/tmp/bitbar"
 readonly state_file="${state_directory}/$(basename "${0}").state"
 
 mkdir -p "${state_directory}"
@@ -21,7 +21,9 @@ readonly spotify_state_file="$(find ${state_directory} -maxdepth 1 -type f -prin
 readonly spotify_state="$(test -f "${spotify_state_file}" && cat "${spotify_state_file}")"
 
 readonly mpc="/usr/local/bin/mpc"
-readonly output="$(timeout 1 ${mpc} -f '%artist%\n%album%\n%title%' 2> /dev/null)"
+# I used to have `timeout` here, but it seems to break the command for some
+# reason.
+readonly output="$(${mpc} -f '%artist%\n%album%\n%title%' 2> /dev/null)"
 
 if [[ "$(echo -e "${output}" | wc -l)" -eq 1 ]]; then
   rm -f "${state_file}"
@@ -60,7 +62,7 @@ fi
 echo "${player_state}" > "${state_file}"
 
 if [[ "${spotify_state}" = "playing" ]] && [[ "${player_state}" = "paused" ]]; then
-  exit
+  exit 0
 fi
 
 if [[ "$player_state" = "playing" ]]; then
