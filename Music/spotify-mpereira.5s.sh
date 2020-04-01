@@ -15,7 +15,7 @@ readonly state_file="${state_directory}/$(basename "${0}").state"
 
 mkdir -p "${state_directory}"
 
-readonly mpd_state_file="$(find ${state_directory} -maxdepth 1 -type f -print -quit -iname "mpd*" 2>/dev/null)"
+readonly mpd_state_file="$(find ${state_directory} -maxdepth 1 -type f -iname "mpd*" -print -quit 2>/dev/null)"
 readonly mpd_state="$(test -f "${mpd_state_file}" && cat "${mpd_state_file}")"
 
 if [[ "$(osascript -e 'application "Spotify" is running')" = "false" ]]; then

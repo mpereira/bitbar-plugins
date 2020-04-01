@@ -17,7 +17,7 @@ readonly state_file="${state_directory}/$(basename "${0}").state"
 
 mkdir -p "${state_directory}"
 
-readonly spotify_state_file="$(find ${state_directory} -maxdepth 1 -type f -print -quit -iname "spotify*" 2>/dev/null)"
+readonly spotify_state_file="$(find ${state_directory} -maxdepth 1 -type f -iname "spotify*" -print -quit 2>/dev/null)"
 readonly spotify_state="$(test -f "${spotify_state_file}" && cat "${spotify_state_file}")"
 
 readonly mpc="/usr/local/bin/mpc"
